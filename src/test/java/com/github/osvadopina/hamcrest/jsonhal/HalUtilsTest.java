@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.github.osvadopina.hamcrest.jsonhal.halexpectation.HalLinkMatcher.hasRel;
+import static com.github.osvadopina.hamcrest.jsonhal.halexpectation.HalLinkHrefConformanceMatcher.isHRelValidUri;
+import static com.github.osvadopina.hamcrest.jsonhal.halexpectation.HalLinkPropertyMatcher.hasRel;
 import static com.github.osvadopina.hamcrest.jsonhal.halexpectation.HalLinksFindMatcher.toHaveLink;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
@@ -63,9 +63,10 @@ public class HalUtilsTest {
 
 
         assertThat(links,
-                    toHaveLink("self-",
+                    toHaveLink("self",
                             hasRel("self1"),
-                            hasRel("self2"))
+                            hasRel("self2"),
+                            isHRelValidUri())
 //                    hasLink("link-rel",
 //                            hasRel("link-rel"))
         );

@@ -6,8 +6,6 @@ import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.core.AllOf.allOf;
@@ -22,7 +20,7 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
     private boolean found = false;
     private List<NotMatched> notMatchedLinks = new ArrayList<NotMatched>();
 
-    public HalLinksFindMatcher(String rel, HalLinkMatcher ... matchers) {
+    public HalLinksFindMatcher(String rel, HalLinkMatcher... matchers) {
         this.rel = rel;
         this.matchers = matchers;
     }
@@ -120,7 +118,7 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
 //
 //    }
 
-    public static HalLinksFindMatcher toHaveLink(String rel, HalLinkMatcher ... matchers) {
+    public static HalLinksFindMatcher toHaveLink(String rel, HalLinkMatcher... matchers) {
         return new HalLinksFindMatcher(rel, matchers);
     }
 
