@@ -10,9 +10,6 @@ import java.util.List;
 
 import static org.hamcrest.core.AllOf.allOf;
 
-/**
- * Created by deinf.osvaldo on 26/04/2016.
- */
 public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
 
     private final HalLinkMatcher[] matchers;
@@ -29,10 +26,10 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
     protected boolean matchesSafely(List<HalLink> item) {
         notMatchedLinks.clear();
         for(HalLink link:item) {
-            if (link.getPropertyValue(HalLinkProperty.REL).equals(rel)) {
+            if (link.getRel().equals(rel)) {
                 found = true;
                 for(Matcher matcher:matchers) {
-                    if (! matcher.matches(item)) {
+                    if (! matcher.matches(link)) {
                         notMatchedLinks.add(new NotMatched(link, matcher));
                     }
                 }
@@ -47,15 +44,15 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
           description.appendText("to find a link with rel ").appendValue(rel);
         }
         else {
-            List<Matcher> descriptions = new ArrayList<Matcher>();
-            description.appendText("for link with rel " + rel + ": ");
-            Description matcherDescription;
-            for(NotMatched notMatched:notMatchedLinks) {
-//                matcherDescription = new StringDescription();
-//                notMatched.getMatcher().describeTo(matcherDescription);
-                descriptions.add(notMatched.getMatcher());
+            if (! notMatchedLinks.isEmpty()) {
+                List<Matcher> descriptions = new ArrayList<Matcher>();
+                description.appendText("for link with rel " + rel + ": ");
+                Description matcherDescription;
+                for (NotMatched notMatched : notMatchedLinks) {
+                    descriptions.add(notMatched.getMatcher());
+                }
+                description.appendList("(", ") and (", ")", descriptions);
             }
-            description.appendList("(", ") and (", ")", descriptions);
         }
     }
 
@@ -64,22 +61,28 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
             mismatchDescription.appendText("the hal links are ");
             List<String> linkList = new ArrayList<String>();
             for (HalLink halLink : actual) {
-                linkList.add(halLink.getPropertyValue(HalLinkProperty.REL));
+                linkList.add(halLink.getRel());
             }
             mismatchDescription.appendValueList("[", ",", "]", linkList);
         }
         else {
-            List<Matcher> matchers = new ArrayList<Matcher>();
-            mismatchDescription.appendText("for link with rel " + rel + ": ");
-            Description matcherDescription;
-            List<String> descriptions = new ArrayList<String>();
-            for(NotMatched notMatched:notMatchedLinks) {
-                matcherDescription = new StringDescription();
-                notMatched.getMatcher().describeMismatch(notMatched.getLink(),matcherDescription);
-                descriptions.add(matcherDescription.toString());
+            if (! notMatchedLinks.isEmpty()) {
+                List<Matcher> matchers = new ArrayList<Matcher>();
+                mismatchDescription.appendText("for link with rel " + rel + ": ");
+                Description matcherDescription;
+                List<String> descriptions = new ArrayList<String>();
+                for (NotMatched notMatched : notMatchedLinks) {
+                    matcherDescription = new StringDescription();
+                    notMatched.getMatcher().describeMismatch(notMatched.getLink(), matcherDescription);
+                    descriptions.add(matcherDescription.toString());
+                }
+                mismatchDescription.appendText(getValueList("(", ") and (", ")", descriptions));
             }
-            mismatchDescription.appendText(getValueList("(" , ") and (",")", descriptions));
         }
+    }
+
+    public String getRel() {
+        return rel;
     }
 
     public String getValueList(String start, String separator, String end,
@@ -101,22 +104,6 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
         return sb.toString();
 
     }
-
-//    @Override
-//    public void describeTo(Description description) {
-//        if (first) {
-//          description.appendText("to find link with rel ").appendText(rel);
-//            first = false;
-//        }
-//        else {
-//            description.appendText("but the links are");
-//            List<String> list = new ArrayList<String>();
-//            for(HalLink halLink:)
-//            description.appendText("link with rel ").appendText(rel);
-//
-//        }
-//
-//    }
 
     public static HalLinksFindMatcher toHaveLink(String rel, HalLinkMatcher... matchers) {
         return new HalLinksFindMatcher(rel, matchers);
