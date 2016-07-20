@@ -1,4 +1,4 @@
-package com.github.osvadopina.hamcrest.jsonhal.halexpectation;
+package com.github.osvadopina.hamcrest.jsonhal.link;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -8,23 +8,22 @@ import org.hamcrest.TypeSafeMatcher;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.core.AllOf.allOf;
-
-public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
+public class HalLinkFindMatcher extends TypeSafeMatcher<Iterable<HalLink>> {
 
     private final HalLinkMatcher[] matchers;
     private final String rel;
     private boolean found = false;
     private List<NotMatched> notMatchedLinks = new ArrayList<NotMatched>();
 
-    public HalLinksFindMatcher(String rel, HalLinkMatcher... matchers) {
+    public HalLinkFindMatcher(String rel, HalLinkMatcher... matchers) {
         this.rel = rel;
         this.matchers = matchers;
     }
 
     @Override
-    protected boolean matchesSafely(List<HalLink> item) {
-        notMatchedLinks.clear();
+    protected boolean matchesSafely(Iterable<HalLink> item) {
+        found = false;
+        notMatchedLinks = new ArrayList<NotMatched>();
         for(HalLink link:item) {
             if (link.getRel().equals(rel)) {
                 found = true;
@@ -47,7 +46,6 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
             if (! notMatchedLinks.isEmpty()) {
                 List<Matcher> descriptions = new ArrayList<Matcher>();
                 description.appendText("for link with rel " + rel + ": ");
-                Description matcherDescription;
                 for (NotMatched notMatched : notMatchedLinks) {
                     descriptions.add(notMatched.getMatcher());
                 }
@@ -56,7 +54,8 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
         }
     }
 
-    protected void describeMismatchSafely(List<HalLink> actual, Description mismatchDescription) {
+    @Override
+    protected void describeMismatchSafely(Iterable<HalLink> actual, Description mismatchDescription) {
         if (! found) {
             mismatchDescription.appendText("the hal links are ");
             List<String> linkList = new ArrayList<String>();
@@ -67,7 +66,6 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
         }
         else {
             if (! notMatchedLinks.isEmpty()) {
-                List<Matcher> matchers = new ArrayList<Matcher>();
                 mismatchDescription.appendText("for link with rel " + rel + ": ");
                 Description matcherDescription;
                 List<String> descriptions = new ArrayList<String>();
@@ -105,10 +103,6 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
 
     }
 
-    public static HalLinksFindMatcher toHaveLink(String rel, HalLinkMatcher... matchers) {
-        return new HalLinksFindMatcher(rel, matchers);
-    }
-
     private static class NotMatched {
         private HalLink link;
         private Matcher<?> matcher;
@@ -126,5 +120,10 @@ public class HalLinksFindMatcher extends TypeSafeMatcher<List<HalLink>> {
             return matcher;
         }
     }
+
+    public static HalLinkFindMatcher haveLink(String rel, HalLinkMatcher... matchers) {
+        return new HalLinkFindMatcher(rel, matchers);
+    }
+
 
 }

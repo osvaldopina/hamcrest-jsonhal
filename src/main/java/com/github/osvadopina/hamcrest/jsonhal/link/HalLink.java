@@ -1,4 +1,4 @@
-package com.github.osvadopina.hamcrest.jsonhal.halexpectation;
+package com.github.osvadopina.hamcrest.jsonhal.link;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class HalLink {
 
     public boolean isTemplated() {
         String templated = getCaseInsensitiveFromMap("templated");
-        return templated==null?false:Boolean.valueOf(getCaseInsensitiveFromMap("template"));
+        return templated==null?false:Boolean.valueOf(getCaseInsensitiveFromMap("templated"));
     }
 
     public String getType() {
@@ -42,8 +42,5 @@ public class HalLink {
         }
         return null;
     }
-
-
-
 
 }

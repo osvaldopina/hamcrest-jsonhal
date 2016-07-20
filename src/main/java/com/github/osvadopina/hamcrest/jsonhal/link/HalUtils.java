@@ -1,4 +1,4 @@
-package com.github.osvadopina.hamcrest.jsonhal.halexpectation;
+package com.github.osvadopina.hamcrest.jsonhal.link;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,13 +27,4 @@ public class HalUtils {
         return links;
     }
 
-    public static class Teste {
-        public Teste(String a) {
-
-        }
-
-        public void a() {
-
-        }
-    }
 }
