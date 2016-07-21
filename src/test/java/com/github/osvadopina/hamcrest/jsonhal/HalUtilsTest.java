@@ -4,6 +4,10 @@ import com.github.osvadopina.hamcrest.jsonhal.link.HalLink;
 import com.github.osvadopina.hamcrest.jsonhal.link.HalUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
 
@@ -13,7 +17,9 @@ import static com.github.osvadopina.hamcrest.jsonhal.uri.UriVariableFindMatcher.
 import static com.github.osvadopina.hamcrest.jsonhal.uri.UriVariableMatcher.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration( "test-servlet-context.xml")
 public class HalUtilsTest {
 
     private String hal;
@@ -39,10 +45,11 @@ public class HalUtilsTest {
 //        tmp.append("        }\n");
 //        tmp.append("    }\n");
 //        tmp.append("}");
-
+/*
         tmp.append("{ \n");
+        tmp.append("    \"prop1\":  \"property-1-value\", \n");
         tmp.append("    \"_links\": {\n");
-        tmp.append("        \"urn:ilr:test\": {\n");
+        tmp.append("        \"urn:irs:test\": {\n");
         tmp.append("            \"href\": \"http://localhost{/var1,var2*}{?var3}\",\n");
         tmp.append("            \"templated\": \"true\"\n");
         tmp.append("        },\n");
@@ -54,7 +61,7 @@ public class HalUtilsTest {
         tmp.append("}");
 
         hal = tmp.toString();
-
+*/
     }
 
     @Test
