@@ -4,18 +4,20 @@ import com.github.osvadopina.hamcrest.jsonhal.link.HalLink;
 import com.github.osvadopina.hamcrest.jsonhal.link.HalLinkFindMatcher;
 import com.github.osvadopina.hamcrest.jsonhal.link.HalUtils;
 import org.hamcrest.Description;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.StringDescription;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.util.List;
 
 public class SpringResultMatcherHamcrestAdapter implements ResultMatcher{
 
-    HalLinkFindMatcher[] halLinkFindMatchers;
+    HalLinkFindMatcher halLinkFindMatcher;
 
-    public SpringResultMatcherHamcrestAdapter(HalLinkFindMatcher ... halLinkFindMatchers) {
-        this.halLinkFindMatchers = halLinkFindMatchers;
+    public SpringResultMatcherHamcrestAdapter(HalLinkFindMatcher  halLinkFindMatcher) {
+        this.halLinkFindMatcher = halLinkFindMatcher;
     }
 
     @Override
@@ -23,16 +25,12 @@ public class SpringResultMatcherHamcrestAdapter implements ResultMatcher{
         String halDocument = result.getResponse().getContentAsString();
 
         List<HalLink> links = HalUtils.getLinks(halDocument);
-        for(HalLinkFindMatcher halLinkFindMatcher:halLinkFindMatchers) {
-            if (! halLinkFindMatcher.matches(links)) {
-                Description stringDescription = new StringDescription();
-                halLinkFindMatcher.describeMismatch(links, stringDescription);
-                System.out.println("desc:" + stringDescription);
-            }
-        }
+
+        MatcherAssert.assertThat(links,halLinkFindMatcher);
+
     }
 
-    public static ResultMatcher links(HalLinkFindMatcher ... halLinkFindMatchers) {
-        return new SpringResultMatcherHamcrestAdapter(halLinkFindMatchers);
+    public static ResultMatcher links(HalLinkFindMatcher halLinkFindMatcher) {
+        return new SpringResultMatcherHamcrestAdapter(halLinkFindMatcher);
     }
 }

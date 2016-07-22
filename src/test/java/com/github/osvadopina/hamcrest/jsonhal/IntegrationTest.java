@@ -44,7 +44,7 @@ public class IntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(
                         links(
-                                haveLink("urn:irs:test",
+                                haveLink("self",
                                         hasValidUriAsHRef(),
                                         isTamplated(),
                                         hasValidRel(),

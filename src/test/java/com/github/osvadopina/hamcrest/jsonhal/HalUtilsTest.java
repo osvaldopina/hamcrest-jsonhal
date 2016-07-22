@@ -2,6 +2,7 @@ package com.github.osvadopina.hamcrest.jsonhal;
 
 import com.github.osvadopina.hamcrest.jsonhal.link.HalLink;
 import com.github.osvadopina.hamcrest.jsonhal.link.HalUtils;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,16 +18,14 @@ import static com.github.osvadopina.hamcrest.jsonhal.uri.UriVariableFindMatcher.
 import static com.github.osvadopina.hamcrest.jsonhal.uri.UriVariableMatcher.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration( "test-servlet-context.xml")
+
 public class HalUtilsTest {
 
     private String hal;
 
 
     @Before
-    public void setUp() {
+     public void setUp() {
 
         StringBuffer tmp = new StringBuffer();
 
@@ -45,7 +44,7 @@ public class HalUtilsTest {
 //        tmp.append("        }\n");
 //        tmp.append("    }\n");
 //        tmp.append("}");
-/*
+
         tmp.append("{ \n");
         tmp.append("    \"prop1\":  \"property-1-value\", \n");
         tmp.append("    \"_links\": {\n");
@@ -54,19 +53,22 @@ public class HalUtilsTest {
         tmp.append("            \"templated\": \"true\"\n");
         tmp.append("        },\n");
         tmp.append("        \"other\": {\n");
-        tmp.append("            \"href\": \"hxxp:self-uri\",\n");
+        tmp.append("            \"href\":[ \"hxxp:self-uri\", 125],\n");
         tmp.append("            \"templated\": \"true\"\n");
         tmp.append("        }\n");
         tmp.append("    }\n");
         tmp.append("}");
 
         hal = tmp.toString();
-*/
     }
 
     @Test
     public void getLinks() throws Exception {
         List<HalLink> links = HalUtils.getLinks(hal);
+
+
+        Object o = JsonPath.parse(hal).read("$._links.other.href");
+        System.out.println(o);
 
 
 //        assertThat("string" , startsWith("ost"));
@@ -83,9 +85,9 @@ public class HalUtilsTest {
 //                haveLink("self",
 //                            hasRel("self")))
 //        );
-
+/*
         assertThat(links,
-                haveLink("urn:irs:test",
+                haveLink("urn:ir:test",
                         hasValidUriAsHRef(),
                         isTamplated(),
                         hasValidRel(),
@@ -105,7 +107,7 @@ public class HalUtilsTest {
                         )
                 )
         );
-
+*/
 
 //        assertThat(links,
 //                  hasOnlyTheseLinks(

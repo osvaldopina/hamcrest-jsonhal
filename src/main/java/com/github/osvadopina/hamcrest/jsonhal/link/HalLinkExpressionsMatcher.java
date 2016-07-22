@@ -21,7 +21,6 @@ public class HalLinkExpressionsMatcher extends HalLinkMatcher {
         this.uriVariableFindMatchers = uriVariableFindMatchers;
     }
 
-
     @Override
     public void describeTo(Description description) {
         if (!notMatched.isEmpty()) {
