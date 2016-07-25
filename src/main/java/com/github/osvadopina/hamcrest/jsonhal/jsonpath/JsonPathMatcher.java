@@ -15,7 +15,7 @@ public class JsonPathMatcher extends TypeSafeMatcher<String> {
 
     private List<AbstractJsonValueMatcher> notMatched;
 
-    public JsonPathMatcher(AbstractJsonValueMatcher abstractJsonValueMatcher) {
+    public JsonPathMatcher(AbstractJsonValueMatcher ... abstractJsonValueMatcher) {
         this.abstractJsonValueMatchers = abstractJsonValueMatchers;
     }
 
@@ -23,7 +23,7 @@ public class JsonPathMatcher extends TypeSafeMatcher<String> {
     @Override
     protected boolean matchesSafely(String item) {
 
-        Object value = JsonPath.parse(item).read(jsonPath);
+        Object value = JsonPath.parse(item).read( jsonPath);
 
         notMatched = new ArrayList<AbstractJsonValueMatcher>();
 

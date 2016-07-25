@@ -39,4 +39,5 @@ public class HalDocumentMatcher extends TypeSafeMatcher<String> {
         }
 
     }
+
 }

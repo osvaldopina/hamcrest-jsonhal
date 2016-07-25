@@ -2,7 +2,8 @@ package com.github.osvadopina.hamcrest.jsonhal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.osvadopina.hamcrest.jsonhal.jsonpath.AbstractJsonValueMatcher;
-import com.github.osvadopina.hamcrest.jsonhal.uri.UriVariableFindMatcher;
+import com.github.osvadopina.hamcrest.jsonhal.link.HalLink;
+import com.github.osvadopina.hamcrest.jsonhal.link.HalLinkFindMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.StringDescription;
 
@@ -11,16 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.fail;
+public class HalLinksMatcherLink extends HalDocumentPartMatcher {
 
-public class HalResourceMatcher extends HalDocumentPartMatcher {
 
-    private AbstractJsonValueMatcher[] abstractJsonValueMatchers;
+    private HalLinkFindMatcher[] halLinkFindMatchers;
 
-    private List<AbstractJsonValueMatcher> notMatched;
+    private List<HalLinkFindMatcher> notMatched;
 
-    public HalResourceMatcher(AbstractJsonValueMatcher[] abstractJsonValueMatchers) {
-        this.abstractJsonValueMatchers = abstractJsonValueMatchers;
+    public HalLinksMatcherLink(HalLinkFindMatcher[] halLinkFindMatchers) {
+        this.halLinkFindMatchers = halLinkFindMatchers;
     }
 
 
@@ -34,13 +34,13 @@ public class HalResourceMatcher extends HalDocumentPartMatcher {
 
     @Override
     protected boolean matchesSafely(String item) {
-        String halResource = getOnlyResourceFromDocument(item);
+        List<HalLink> halLinks = getLinksFromDocument(item);
 
-        notMatched = new ArrayList<AbstractJsonValueMatcher>();
+        notMatched = new ArrayList<HalLinkFindMatcher>();
 
-        for (AbstractJsonValueMatcher abstractJsonValueMatcher: abstractJsonValueMatchers) {
-            if (!abstractJsonValueMatcher.matches(halResource)) {
-                notMatched.add(abstractJsonValueMatcher);
+        for (HalLinkFindMatcher linkFindMatcher : halLinkFindMatchers) {
+            if (!linkFindMatcher.matches(halLinks)) {
+                notMatched.add(linkFindMatcher);
             }
         }
         return notMatched.isEmpty();
@@ -52,25 +52,32 @@ public class HalResourceMatcher extends HalDocumentPartMatcher {
             mismatchDescription.appendText("for uri : ");
             Description matcherDescription;
             List<String> descriptions = new ArrayList<String>();
-            for (AbstractJsonValueMatcher abstractJsonValueMatcher: notMatched) {
+            for (HalLinkFindMatcher halLinkFindMatcher : notMatched) {
                 matcherDescription = new StringDescription();
-                abstractJsonValueMatcher.describeMismatch(getOnlyResourceFromDocument(actual), matcherDescription);
+                halLinkFindMatcher.describeMismatch(getLinksFromDocument(actual), matcherDescription);
                 descriptions.add(matcherDescription.toString());
             }
             mismatchDescription.appendText(getValueList("(", ") and (", ")", descriptions));
         }
     }
 
-    private String getOnlyResourceFromDocument(String item) {
+    private List<HalLink> getLinksFromDocument(String item) {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-            Map<String,Object> parsedHal = mapper.readValue(item, Map.class);
+            Map<String, Object> parsedHal = mapper.readValue(item, Map.class);
 
-            parsedHal.remove("_links");
-            parsedHal.remove("_embedded");
+            Object links = parsedHal.get("_links");
 
-            return mapper.writeValueAsString(parsedHal);
+            Map<String, Map<String, Object>> halLinks = (Map<String, Map<String, Object>>) links;
+
+            List<HalLink> result = new ArrayList<HalLink>();
+
+            for (String link : halLinks.keySet()) {
+                result.add(new HalLink(link, halLinks.get(link)));
+
+            }
+            return result;
 
         } catch (IOException e) {
             throw new AssertionError(e.getMessage(), e);
@@ -96,9 +103,8 @@ public class HalResourceMatcher extends HalDocumentPartMatcher {
 
     }
 
-    public static HalResourceMatcher resource(AbstractJsonValueMatcher[] abstractJsonValueMatchers) {
-        return new HalResourceMatcher(abstractJsonValueMatchers);
+    public static HalLinksMatcherLink links(HalLinkFindMatcher ...halLinkFindMatchers) {
+        return new HalLinksMatcherLink(halLinkFindMatchers);
     }
-
 
 }
