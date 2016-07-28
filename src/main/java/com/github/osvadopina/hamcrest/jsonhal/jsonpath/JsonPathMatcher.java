@@ -2,6 +2,7 @@ package com.github.osvadopina.hamcrest.jsonhal.jsonpath;
 
 import com.jayway.jsonpath.JsonPath;
 import org.hamcrest.Description;
+import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.ArrayList;
@@ -15,7 +16,10 @@ public class JsonPathMatcher extends TypeSafeMatcher<String> {
 
     private List<AbstractJsonValueMatcher> notMatched;
 
-    public JsonPathMatcher(AbstractJsonValueMatcher ... abstractJsonValueMatcher) {
+    private Object value;
+
+    public JsonPathMatcher(String jsonPath, AbstractJsonValueMatcher... abstractJsonValueMatchers) {
+        this.jsonPath = jsonPath;
         this.abstractJsonValueMatchers = abstractJsonValueMatchers;
     }
 
@@ -23,12 +27,12 @@ public class JsonPathMatcher extends TypeSafeMatcher<String> {
     @Override
     protected boolean matchesSafely(String item) {
 
-        Object value = JsonPath.parse(item).read( jsonPath);
+        value = JsonPath.parse(item).read(jsonPath);
 
         notMatched = new ArrayList<AbstractJsonValueMatcher>();
 
         for (AbstractJsonValueMatcher abstractJsonValueMatcher : abstractJsonValueMatchers) {
-            if (! abstractJsonValueMatcher.matches(value)) {
+            if (!abstractJsonValueMatcher.matches(value)) {
                 notMatched.add(abstractJsonValueMatcher);
             }
         }
@@ -36,11 +40,49 @@ public class JsonPathMatcher extends TypeSafeMatcher<String> {
     }
 
     @Override
+    protected void describeMismatchSafely(String actual, Description mismatchDescription) {
+        mismatchDescription
+                .appendText("for json path : " + jsonPath + " ");
+        Description matcherDescription;
+        List<String> descriptions = new ArrayList<String>();
+        for (AbstractJsonValueMatcher noMatch : notMatched) {
+            matcherDescription = new StringDescription();
+            noMatch.describeMismatch(JsonPath.parse(actual).read(jsonPath), matcherDescription);
+            descriptions.add(matcherDescription.toString());
+        }
+        mismatchDescription.appendText(getValueList("(", ") and (", ")", descriptions));
+    }
+
+
+    @Override
     public void describeTo(Description description) {
         if (!notMatched.isEmpty()) {
-            description.appendText("for json path : " + jsonPath);
+            description.appendText("for json path : " + jsonPath + " ");
             description.appendList("(", ") and (", ")", notMatched);
         }
+
+    }
+
+    public static JsonPathMatcher jsonPath(String jsonPath, AbstractJsonValueMatcher... abstractJsonValueMatchers) {
+        return new JsonPathMatcher(jsonPath, abstractJsonValueMatchers);
+    }
+
+    public String getValueList(String start, String separator, String end,
+                               List<String> values) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(start);
+        boolean first = true;
+        for (String value : values) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append(separator);
+            }
+            sb.append(value);
+        }
+        sb.append(end);
+        return sb.toString();
 
     }
 }

@@ -2,6 +2,7 @@ package com.github.osvadopina.hamcrest.jsonhal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.osvadopina.hamcrest.jsonhal.jsonpath.AbstractJsonValueMatcher;
+import com.github.osvadopina.hamcrest.jsonhal.jsonpath.JsonPathMatcher;
 import com.github.osvadopina.hamcrest.jsonhal.uri.UriVariableFindMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.StringDescription;
@@ -15,19 +16,19 @@ import static org.junit.Assert.fail;
 
 public class HalResourceMatcher extends HalDocumentPartMatcher {
 
-    private AbstractJsonValueMatcher[] abstractJsonValueMatchers;
+    private JsonPathMatcher[] jsonPathMatchers;
 
-    private List<AbstractJsonValueMatcher> notMatched;
+    private List<JsonPathMatcher> notMatched;
 
-    public HalResourceMatcher(AbstractJsonValueMatcher[] abstractJsonValueMatchers) {
-        this.abstractJsonValueMatchers = abstractJsonValueMatchers;
+    public HalResourceMatcher(JsonPathMatcher... jsonPathMatchers) {
+        this.jsonPathMatchers = jsonPathMatchers;
     }
 
 
     @Override
     public void describeTo(Description description) {
         if (!notMatched.isEmpty()) {
-            description.appendText("for uri : ");
+            description.appendText("for resource : ");
             description.appendList("(", ") and (", ")", notMatched);
         }
     }
@@ -36,11 +37,11 @@ public class HalResourceMatcher extends HalDocumentPartMatcher {
     protected boolean matchesSafely(String item) {
         String halResource = getOnlyResourceFromDocument(item);
 
-        notMatched = new ArrayList<AbstractJsonValueMatcher>();
+        notMatched = new ArrayList<JsonPathMatcher>();
 
-        for (AbstractJsonValueMatcher abstractJsonValueMatcher: abstractJsonValueMatchers) {
-            if (!abstractJsonValueMatcher.matches(halResource)) {
-                notMatched.add(abstractJsonValueMatcher);
+        for (JsonPathMatcher jsonPathMatcher: jsonPathMatchers) {
+            if (!jsonPathMatcher.matches(halResource)) {
+                notMatched.add(jsonPathMatcher);
             }
         }
         return notMatched.isEmpty();
@@ -49,12 +50,12 @@ public class HalResourceMatcher extends HalDocumentPartMatcher {
     @Override
     protected void describeMismatchSafely(String actual, Description mismatchDescription) {
         if (!notMatched.isEmpty()) {
-            mismatchDescription.appendText("for uri : ");
+            mismatchDescription.appendText("for resource : ");
             Description matcherDescription;
             List<String> descriptions = new ArrayList<String>();
-            for (AbstractJsonValueMatcher abstractJsonValueMatcher: notMatched) {
+            for (JsonPathMatcher jsonPathMatcher: notMatched) {
                 matcherDescription = new StringDescription();
-                abstractJsonValueMatcher.describeMismatch(getOnlyResourceFromDocument(actual), matcherDescription);
+                jsonPathMatcher.describeMismatch(getOnlyResourceFromDocument(actual), matcherDescription);
                 descriptions.add(matcherDescription.toString());
             }
             mismatchDescription.appendText(getValueList("(", ") and (", ")", descriptions));
@@ -96,8 +97,8 @@ public class HalResourceMatcher extends HalDocumentPartMatcher {
 
     }
 
-    public static HalResourceMatcher resource(AbstractJsonValueMatcher[] abstractJsonValueMatchers) {
-        return new HalResourceMatcher(abstractJsonValueMatchers);
+    public static HalResourceMatcher resource(JsonPathMatcher ...jsonPathMatchers) {
+        return new HalResourceMatcher(jsonPathMatchers);
     }
 
 

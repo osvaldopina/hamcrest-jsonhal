@@ -18,32 +18,23 @@ public abstract class JsonValueMatcher<T> extends AbstractJsonValueMatcher {
 
             @Override
             protected boolean matchesSafely(Object item) {
-                if (! (item instanceof String)) {
-                    return false;
-                }
                 if (! value.equals(item)) {
                     return false;
                 }
-                return true;
+                else {
+                    return true;
+                }
             }
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("be a number");
+                description.appendText("be \"" + value + "\"");
             }
 
             @Override
             protected void describeMismatchSafely(Object actual, Description mismatchDescription) {
-                if (! (actual instanceof String)) {
-                    mismatchDescription
-                            .appendValue(actual)
-                            .appendText(" is not a string");
-
-                }
                 mismatchDescription
-                        .appendText("was expecting")
-                        .appendValue(value)
-                        .appendText("but it was")
+                        .appendText("but it was ")
                         .appendValue(actual);
             }
         };

@@ -31,10 +31,10 @@ public class RestControllerTest {
         document.setFirstProperty("first property");
         document.setSecondProperty(100);
 
-        embeddedDocument.setFirstProperty("first property of embedded document");
+        embeddedDocument.setFirstProperty("first property of embeddeds document");
         embeddedDocument.setSecondProperty(200);
 
-        document.addEmbedded("embedded-document", embeddedDocument);
+        document.addEmbedded("embeddeds-document", embeddedDocument);
 
         Link self = linkTo(methodOn(RestControllerTest.class).getHalDocument()).withSelfRel();
 

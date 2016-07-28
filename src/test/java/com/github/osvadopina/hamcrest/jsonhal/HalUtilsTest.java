@@ -5,13 +5,14 @@ import com.github.osvadopina.hamcrest.jsonhal.link.HalUtils;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
 
+import static com.github.osvadopina.hamcrest.jsonhal.HalDocumentMatcher.halDocument;
+import static com.github.osvadopina.hamcrest.jsonhal.HalResourceMatcher.resource;
+import static com.github.osvadopina.hamcrest.jsonhal.jsonpath.JsonPathMatcher.jsonPath;
+import static com.github.osvadopina.hamcrest.jsonhal.jsonpath.JsonValueMatcher.is;
+import static com.github.osvadopina.hamcrest.jsonhal.jsonpath.JsonValueTypeMatcher.isString;
 import static com.github.osvadopina.hamcrest.jsonhal.link.HalLinkFindMatcher.haveLink;
 import static com.github.osvadopina.hamcrest.jsonhal.link.HalLinkPropertyMatcher.*;
 import static com.github.osvadopina.hamcrest.jsonhal.uri.UriVariableFindMatcher.hasVariable;
@@ -56,6 +57,14 @@ public class HalUtilsTest {
         tmp.append("            \"href\":[ \"hxxp:self-uri\", 125],\n");
         tmp.append("            \"templated\": \"true\"\n");
         tmp.append("        }\n");
+        tmp.append("    },\n");
+        tmp.append("    \"_embedded\": {\n");
+        tmp.append("        \"emb1\": {\n");
+        tmp.append("            \"prop-emb-1\": \"prop-emb-1-value\"\n");
+        tmp.append("        },\n");
+        tmp.append("        \"emb2\": {\n");
+        tmp.append("            \"prop-emb-2\":\"prop-emb-2-value\"\n");
+        tmp.append("        }\n");
         tmp.append("    }\n");
         tmp.append("}");
 
@@ -85,29 +94,43 @@ public class HalUtilsTest {
 //                haveLink("self",
 //                            hasRel("self")))
 //        );
-/*
-        assertThat(links,
-                haveLink("urn:ir:test",
-                        hasValidUriAsHRef(),
-                        isTamplated(),
-                        hasValidRel(),
-                        href(
-                                hasVariable("var1",
+
+        assertThat(hal,
+                halDocument(
+                        resource(
+                            jsonPath("$.prop1",
+                                    isString(),
+                                    is("property-1-value")
+                            )
+                        ),
+                        HalEmbeddedsMatcher.embeddeds(
+
+
+                        ),
+                        HalLinksMatcher.links(
+                            haveLink("urn:irs:test",
+                                hasValidUriAsHRef(),
+                                isTamplated(),
+                                hasValidRel(),
+                                href(
+                                    hasVariable("var1",
+                                        // hasQueryExpansion(),
                                         hasPathExpansion(),
                                         hasNotExplodedExpansion()
-                                ),
-                                hasVariable("var2",
+                                    ),
+                                    hasVariable("var2",
                                         hasPathExpansion(),
                                         hasExplodedExpansion()
-                                ),
-                                hasVariable("var3",
+                                    ),
+                                    hasVariable("var3",
                                         hasQueryExpansion(),
                                         hasNotExplodedExpansion()
+                                    )
                                 )
+                            )
                         )
                 )
         );
-*/
 
 //        assertThat(links,
 //                  hasOnlyTheseLinks(
