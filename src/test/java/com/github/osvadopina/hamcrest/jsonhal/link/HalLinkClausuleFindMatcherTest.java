@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class HalLinkFindMatcherTest {
+public class HalLinkClausuleFindMatcherTest {
 
     private HalLinkMatcher alwaysTrueHalLinkMatcher = new HalLinkMatcher() {
         @Override

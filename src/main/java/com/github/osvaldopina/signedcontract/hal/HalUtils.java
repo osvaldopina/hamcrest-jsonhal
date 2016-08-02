@@ -61,5 +61,7 @@ public class HalUtils {
         }
     }
 
-    public getJsonPropValueAsBoolean
+    public boolean getJsonPropValueAsBoolean(String value, boolean defaultValue) {
+        return true;
+    }
 }

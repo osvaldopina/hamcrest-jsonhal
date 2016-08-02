@@ -14,7 +14,7 @@ public class StringJsonPathPropertyValue extends JsonPathPropertyValue {
     }
 
     @Override
-    public List<Violation> enforce(String document) {
+    public List<Violation> enforceClausule(String document) {
 
         Object documentValue = JsonPath.parse(document).read(getJsonPath());
 

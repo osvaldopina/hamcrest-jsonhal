@@ -1,14 +1,12 @@
 package com.github.osvaldopina.signedcontract.hal;
 
-import com.github.osvaldopina.signedcontract.BranchClausule;
-import com.github.osvaldopina.signedcontract.Clausule;
-import com.github.osvaldopina.signedcontract.hal.link.Link;
+import com.github.osvaldopina.signedcontract.hal.link.LinkClausule;
 
 import java.util.List;
 
-public class Links extends BranchClausule implements HalClausule{
+public class Links extends HalClausule {
 
-    public Links(List<Link> subClausules) {
+    public Links(List<LinkClausule> subClausules) {
         super(subClausules);
     }
 

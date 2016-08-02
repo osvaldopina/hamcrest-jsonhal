@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Resource extends BranchClausule implements HalClausule{
+public class Resource extends HalClausule{
 
     public Resource(JsonPropertyList subClausules) {
         super(Arrays.asList(subClausules));

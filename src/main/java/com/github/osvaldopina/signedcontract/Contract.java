@@ -10,7 +10,7 @@ public class Contract extends BranchClausule {
 
 
     public Contract(List<? extends Clausule> clausules) {
-        super(clausules);
+        super(null, clausules);
     }
 
     public List<Clausule> getClausules() {

@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class HalLinkPropertyMatcherTest {
+public class HalLinkClausulePropertyMatcherTest {
 
     private HalLink halLink;
 

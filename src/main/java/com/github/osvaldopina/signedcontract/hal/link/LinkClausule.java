@@ -5,16 +5,13 @@ import com.github.osvaldopina.signedcontract.BranchClausule;
 import com.github.osvaldopina.signedcontract.Violation;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Link extends BranchClausule {
+public class LinkClausule extends BranchClausule {
 
     private String rel;
 
-    public Link(String rel, List<LinkProperty> subClausules) {
+    public LinkClausule(String rel, List<BaseLinkPropertyClausule> subClausules) {
         super(subClausules);
     }
 
@@ -29,7 +26,7 @@ public class Link extends BranchClausule {
         Map<String,Object> parsedHal = null;
         try {
             parsedHal = mapper.readValue(document, Map.class);
-            return mapper.writeValueAsString(parsedHal.get(rel));
+            return mapper.writeValueAsString( new HashMap<String, Object>().put(rel, parsedHal.get(rel)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

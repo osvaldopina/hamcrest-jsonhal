@@ -3,14 +3,12 @@ package com.github.osvaldopina.signedcontract;
 import java.util.Collections;
 import java.util.List;
 
-public class LeafClausule implements Clausule{
-    @Override
-    public String dismemberDocument(String document) {
-        return document;
+public class LeafClausule extends Clausule{
+
+
+    public final List<Violation> enforce(String document) {
+        return super.enforce(document);
     }
 
-    @Override
-    public List<Violation> enforce(String document) {
-        return Collections.emptyList();
-    }
+
 }

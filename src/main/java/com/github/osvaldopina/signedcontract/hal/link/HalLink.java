@@ -4,17 +4,19 @@ import java.util.Map;
 
 public class HalLink {
 
-    private String rel;
-
     private Map<String, Object> link;
 
-    public HalLink(String rel, Map<String,Object> linkProps) {
-        this.rel = rel;
-        this.link = linkProps;
+    private String rel;
+
+    public HalLink(Map<String,Object> linkProps) {
+        assert linkProps.keySet().size() == 1 : "link must have a rel as the only property entry";
+
+        this.rel = linkProps.keySet().toArray()[0].toString();
+        this.link = (Map<String,Object>) linkProps.get(rel);
     }
 
     public String getRel() {
-        return rel;
+        return  rel;
     }
 
     public String getHRef() {
@@ -34,5 +36,13 @@ public class HalLink {
         return getCaseInsensitiveFromMap("hreflang");
     }
 
+    public String getCaseInsensitiveFromMap(String key) {
+        for(Map.Entry<String,Object> entry:link.entrySet()) {
+            if (key.toUpperCase().equals(entry.getKey().toUpperCase())) {
+                return entry.getValue()==null?null:entry.getValue().toString();
+            }
+        }
+        return null;
+    }
 
 }

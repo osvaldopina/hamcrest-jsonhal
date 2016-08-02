@@ -70,7 +70,11 @@ public class SignedControlHalDslTest {
                         is("$.prop1","property-1-value")
                     ),
                     links(
-                        link("urn:irs:test")
+                        link("urn:irs:test",
+                                uriTemplate(
+                                        variable("var1")
+                                )
+                        )
                     )
                 );
 
