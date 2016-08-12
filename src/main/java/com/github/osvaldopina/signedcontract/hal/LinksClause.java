@@ -1,12 +1,12 @@
 package com.github.osvaldopina.signedcontract.hal;
 
-import com.github.osvaldopina.signedcontract.hal.link.LinkClausule;
+import com.github.osvaldopina.signedcontract.hal.link.LinkClause;
 
 import java.util.List;
 
-public class Links extends HalClausule {
+public class LinksClause extends HalDocumentClause {
 
-    public Links(List<LinkClausule> subClausules) {
+    public LinksClause(List<LinkClause> subClausules) {
         super(subClausules);
     }
 
@@ -14,4 +14,5 @@ public class Links extends HalClausule {
     public String dismemberDocument(String document) {
         return HalUtils.getLinks(document);
     }
+
 }

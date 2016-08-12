@@ -1,13 +1,10 @@
 package com.github.osvaldopina.signedcontract.hal.link;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.osvaldopina.signedcontract.Clausule;
-import com.github.osvaldopina.signedcontract.LeafClausule;
+import com.github.osvaldopina.signedcontract.LeafClause;
 
-import java.io.IOException;
 import java.util.Map;
 
-public class BaseLinkPropertyClausule extends Clausule {
+public abstract class LinkPropertyClauseImpl extends LeafClause implements LinkPropertyClause {
 
 
     public String getCaseInsensitiveFromMap(Map<String,Object> map, String key) {

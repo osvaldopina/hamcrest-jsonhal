@@ -1,18 +1,18 @@
 package com.github.osvaldopina.signedcontract.hal.link;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.osvaldopina.signedcontract.BranchClausule;
-import com.github.osvaldopina.signedcontract.Violation;
+import com.github.osvaldopina.signedcontract.BranchClause;
 
 import java.io.IOException;
 import java.util.*;
 
-public class LinkClausule extends BranchClausule {
+public class LinkClause extends BranchClause {
 
     private String rel;
 
-    public LinkClausule(String rel, List<BaseLinkPropertyClausule> subClausules) {
+    public LinkClause(String rel, List<LinkPropertyClause> subClausules) {
         super(subClausules);
+        this.rel = rel;
     }
 
     public String getRel() {
@@ -26,20 +26,27 @@ public class LinkClausule extends BranchClausule {
         Map<String,Object> parsedHal = null;
         try {
             parsedHal = mapper.readValue(document, Map.class);
-            return mapper.writeValueAsString( new HashMap<String, Object>().put(rel, parsedHal.get(rel)));
+            Map<String, Object> link = new HashMap<String, Object>();
+            if (parsedHal.get(rel) == null) {
+                return "{}";
+            }
+            else {
+                link.put(rel, parsedHal.get(rel));
+                return mapper.writeValueAsString(link);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public List<Violation> enforceClause(String document) {
+    @Override
+    public void enforceClause(String document) {
 
         Map<String,Object> links = parseJson(document);
         if (links.get(rel) == null) {
-            return Arrays.asList((Violation) new LinkNotFoundViolation(rel, links.keySet()));
+            addHalViolation("could not find link with rel " + rel);
         }
-        return Collections.emptyList();
     }
 
     private Map<String,Object> parseJson(String json) {

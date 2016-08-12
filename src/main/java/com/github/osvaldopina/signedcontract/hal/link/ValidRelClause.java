@@ -1,14 +1,14 @@
 package com.github.osvaldopina.signedcontract.hal.link;
 
-import com.github.osvaldopina.signedcontract.Violation;
-import com.github.osvaldopina.signedcontract.ViolationsFactory;
 import com.github.osvaldopina.signedcontract.hal.HalUtils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ValidRelClausule extends BaseLinkPropertyClausule {
+public class ValidRelClause extends LinkPropertyClauseImpl {
 
     private static Set<String> IANA_RELS = new HashSet<String>(Arrays.asList("about", "alternate", "appendix", "archives",
             "author", "bookmark", "canonical", "chapter", "collection", "contents", "copyright", "create-form",
@@ -22,25 +22,19 @@ public class ValidRelClausule extends BaseLinkPropertyClausule {
 
 
     @Override
-    public List<Violation> enforceClausule(String document) {
+    public void enforceClause(String document) {
 
         HalLink halLink = new HalLink(HalUtils.parse(document));
 
-
-            if (!IANA_RELS.contains(halLink.getRel())) {
-                try {
-                    URI relUri = new URI(halLink.getRel());
-                    if (! relUri.isAbsolute()) {
-                        return ViolationsFactory.getInstance().createViolations(
-                                new LinkPropertyViolation("link to be a absolute uri or a valid IANA rel", "not")
-                        );
-                    }
-                } catch (URISyntaxException e) {
-                    return ViolationsFactory.getInstance().createViolations(
-                            new LinkPropertyViolation("link to be a absolute uri or a valid IANA rel", "not")
-                    );
+        if (!IANA_RELS.contains(halLink.getRel())) {
+            try {
+                URI relUri = new URI(halLink.getRel());
+                if (!relUri.isAbsolute()) {
+                    addViolation("Expecting link rel to be a absolute uri or a valid IANA rel.");
                 }
+            } catch (URISyntaxException e) {
+                addViolation("Expecting link rel to be a absolute uri or a valid IANA rel.");
             }
-            return  Collections.EMPTY_LIST;
+        }
     }
 }

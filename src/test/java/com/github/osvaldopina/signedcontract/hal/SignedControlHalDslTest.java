@@ -1,13 +1,10 @@
 package com.github.osvaldopina.signedcontract.hal;
 
 import com.github.osvaldopina.signedcontract.Contract;
-import com.github.osvaldopina.signedcontract.Violation;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 import static com.github.osvaldopina.signedcontract.hal.SignedControlHalDsl.*;
-import static org.junit.Assert.*;
 
 /**
  * Created by deinf.osvaldo on 28/07/2016.
@@ -16,6 +13,7 @@ public class SignedControlHalDslTest {
 
     private String hal;
 
+    @Before
     public void setUp() {
         StringBuffer tmp = new StringBuffer();
 
@@ -66,23 +64,38 @@ public class SignedControlHalDslTest {
     public void test() {
         Contract contract =
                 halDocument(
-                    resource(
-                        is("$.prop1","property-1-value")
-                    ),
-                    links(
-                        link("urn:irs:test",
-                                uriTemplate(
-                                        variable("var1")
+                        resource(
+                                is("$.prop1", "property-2-value")
+                        ),
+                        links(
+                                link("urn:irs:test",
+                                        uriTemplate(
+                                                variable("var1",
+                                                        isPath(),
+                                                        isExploded()
+                                                )
+                                        )
+                                ),
+                                link("other",
+                                        uriTemplate(
+                                                variable("var1",
+                                                        isPath(),
+                                                        isExploded()
+                                                )
+                                        )
                                 )
                         )
-                    )
                 );
 
-       List<Violation> violations = contract.enforce(hal);
+        contract.enforce(hal);
 
-        System.out.println(violations);
+        ShowViolationWalker showViolationWalker = new ShowViolationWalker();
+
+        contract.walk(showViolationWalker);
+
+
+        //    System.out.println(contract.getViolations());
     }
-
 
 
 }

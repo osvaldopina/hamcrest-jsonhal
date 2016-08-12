@@ -1,8 +1,8 @@
 package com.github.osvaldopina.signedcontract.json;
 
-import com.github.osvaldopina.signedcontract.LeafClausule;
+import com.github.osvaldopina.signedcontract.LeafClause;
 
-public class JsonPathPropertyValue extends LeafClausule {
+public class JsonPathPropertyValue extends LeafClause {
 
     private String jsonPath;
 
@@ -19,5 +19,10 @@ public class JsonPathPropertyValue extends LeafClausule {
 
     public Object getValue() {
         return value;
+    }
+
+    @Override
+    protected void enforceClause(String document) {
+        todo
     }
 }

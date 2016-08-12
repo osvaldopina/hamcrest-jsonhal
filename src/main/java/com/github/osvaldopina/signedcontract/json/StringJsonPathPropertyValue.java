@@ -1,11 +1,6 @@
 package com.github.osvaldopina.signedcontract.json;
 
-import com.github.osvaldopina.signedcontract.Violation;
 import com.jayway.jsonpath.JsonPath;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class StringJsonPathPropertyValue extends JsonPathPropertyValue {
 
@@ -14,20 +9,17 @@ public class StringJsonPathPropertyValue extends JsonPathPropertyValue {
     }
 
     @Override
-    public List<Violation> enforceClausule(String document) {
+    public void enforceClause(String document) {
 
         Object documentValue = JsonPath.parse(document).read(getJsonPath());
 
         JSON_TYPE jsonType = JSON_TYPE.fromJavaType(documentValue);
         if (!(documentValue instanceof String )) {
-            return Arrays.asList(
-                    (Violation) new JsonPathPropertyViolation(getJsonPath(), "\""+ getValue() +"\"", ""+jsonType));
+            addViolation(new StringBuilder().append("expected ").append(getJsonPath()).append(" to be string ").append(" but it was ").append(jsonType).toString());
         }
         if (!getValue().equals(documentValue)) {
-            return Arrays.asList(
-                    (Violation) new JsonPathPropertyViolation(getJsonPath(), "\""+ getValue() +"\"", "\""+documentValue+"\""));
+            addViolation(new StringBuilder().append("expected ").append(getJsonPath()).append(" to be \"").append(documentValue).append("\" but it was ").append(jsonType).toString());
         }
-        return Collections.emptyList();
     }
 
 }

@@ -1,20 +1,19 @@
 package com.github.osvaldopina.signedcontract;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
-public class Contract extends BranchClausule {
+public class Contract extends BranchClause {
 
-    private List<Clausule> clausules;
+    private List<Clause> clauses;
 
 
-    public Contract(List<? extends Clausule> clausules) {
-        super(null, clausules);
+    public Contract(List<? extends Clause> clauses) {
+        super(clauses);
     }
 
-    public List<Clausule> getClausules() {
-        return clausules;
-    }
+
+
 
 }
