@@ -1,4 +1,4 @@
-package com.github.osvadopina.hamcrest.jsonhal.halexpectation;
+package com.github.osvadopina.hamcrest.jsonhal.link;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -1,20 +1,22 @@
-package com.github.osvadopina.hamcrest.jsonhal.halexpectation;
+package com.github.osvaldopina.signedcontract.hal.link;
 
 import java.util.Map;
 
 public class HalLink {
 
-    private String rel;
-
     private Map<String, Object> link;
 
-    public HalLink(String rel, Map<String,Object> linkProps) {
-        this.rel = rel;
-        this.link = linkProps;
+    private String rel;
+
+    public HalLink(Map<String,Object> linkProps) {
+        assert linkProps.keySet().size() == 1 : "link must have a rel as the only property entry";
+
+        this.rel = linkProps.keySet().toArray()[0].toString();
+        this.link = (Map<String,Object>) linkProps.get(rel);
     }
 
     public String getRel() {
-        return rel;
+        return  rel;
     }
 
     public String getHRef() {
@@ -23,7 +25,7 @@ public class HalLink {
 
     public boolean isTemplated() {
         String templated = getCaseInsensitiveFromMap("templated");
-        return templated==null?false:Boolean.valueOf(getCaseInsensitiveFromMap("template"));
+        return templated==null?false:Boolean.valueOf(getCaseInsensitiveFromMap("templated"));
     }
 
     public String getType() {
@@ -34,16 +36,13 @@ public class HalLink {
         return getCaseInsensitiveFromMap("hreflang");
     }
 
-    private String getCaseInsensitiveFromMap(String key) {
+    public String getCaseInsensitiveFromMap(String key) {
         for(Map.Entry<String,Object> entry:link.entrySet()) {
-            if (key.equalsIgnoreCase(entry.getKey())) {
+            if (key.toUpperCase().equals(entry.getKey().toUpperCase())) {
                 return entry.getValue()==null?null:entry.getValue().toString();
             }
         }
         return null;
     }
-
-
-
 
 }
