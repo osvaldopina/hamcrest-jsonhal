@@ -36,7 +36,7 @@ public class HalLink {
 
     private String getCaseInsensitiveFromMap(String key) {
         for(Map.Entry<String,Object> entry:link.entrySet()) {
-            if (key.toUpperCase().equals(entry.getKey().toUpperCase())) {
+            if (key.equalsIgnoreCase(entry.getKey())) {
                 return entry.getValue()==null?null:entry.getValue().toString();
             }
         }

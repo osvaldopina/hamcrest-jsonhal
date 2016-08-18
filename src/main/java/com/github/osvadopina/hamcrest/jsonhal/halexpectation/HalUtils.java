@@ -27,13 +27,4 @@ public class HalUtils {
         return links;
     }
 
-    public static class Teste {
-        public Teste(String a) {
-
-        }
-
-        public void a() {
-
-        }
-    }
 }
