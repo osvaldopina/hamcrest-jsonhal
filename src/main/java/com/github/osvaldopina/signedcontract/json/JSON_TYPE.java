@@ -15,7 +15,7 @@ public enum JSON_TYPE {
 
     public static JSON_TYPE fromJavaType(Object object) {
         if (object == null) {
-            throw new IllegalStateException("Cannot determine json type from null value!");
+            throw new IllegalStateException("Cannot determine jsonpath type from null value!");
         }
         else {
             return fromJavaType(object.getClass());
@@ -24,7 +24,7 @@ public enum JSON_TYPE {
 
     public static JSON_TYPE fromJavaType(Class<?> javaType) {
         if (javaType == null) {
-            throw new IllegalStateException("Cannot determine json type from null value");
+            throw new IllegalStateException("Cannot determine jsonpath type from null value");
         }
         if (List.class.isAssignableFrom(javaType)) {
             return ARRAY;
@@ -39,7 +39,7 @@ public enum JSON_TYPE {
             return OBJECT;
         }
         else {
-            throw new IllegalStateException("class " + javaType.getName() + " is not a valid json type");
+            throw new IllegalStateException("class " + javaType.getName() + " is not a valid jsonpath type");
         }
 
     }

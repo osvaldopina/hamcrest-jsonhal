@@ -23,7 +23,7 @@ public abstract class JsonValueTypeMatcher extends AbstractJsonValueMatcher {
             @Override
             protected void describeMismatchSafely(Object actual, Description mismatchDescription) {
                 mismatchDescription
-                        .appendText("json value was ")
+                        .appendText("jsonpath value was ")
                         .appendValue(actual.getClass());
             }
 
@@ -46,7 +46,7 @@ public abstract class JsonValueTypeMatcher extends AbstractJsonValueMatcher {
             @Override
             protected void describeMismatchSafely(Object actual, Description mismatchDescription) {
                 mismatchDescription
-                        .appendText("json value was ")
+                        .appendText("jsonpath value was ")
                         .appendValue(actual.getClass());
             }
 
@@ -69,7 +69,7 @@ public abstract class JsonValueTypeMatcher extends AbstractJsonValueMatcher {
             @Override
             protected void describeMismatchSafely(Object actual, Description mismatchDescription) {
                 mismatchDescription
-                        .appendText("json value was ")
+                        .appendText("jsonpath value was ")
                         .appendValue(actual.getClass());
             }
 
@@ -92,7 +92,7 @@ public abstract class JsonValueTypeMatcher extends AbstractJsonValueMatcher {
             @Override
             protected void describeMismatchSafely(Object actual, Description mismatchDescription) {
                 mismatchDescription
-                        .appendText("json value was ")
+                        .appendText("jsonpath value was ")
                         .appendValue(actual.getClass());
             }
 
@@ -115,7 +115,7 @@ public abstract class JsonValueTypeMatcher extends AbstractJsonValueMatcher {
             @Override
             protected void describeMismatchSafely(Object actual, Description mismatchDescription) {
                 mismatchDescription
-                        .appendText("json value was ")
+                        .appendText("jsonpath value was ")
                         .appendValue(actual.getClass());
             }
 

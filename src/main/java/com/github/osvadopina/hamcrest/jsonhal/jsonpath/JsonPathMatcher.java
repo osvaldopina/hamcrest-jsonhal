@@ -42,7 +42,7 @@ public class JsonPathMatcher extends TypeSafeMatcher<String> {
     @Override
     protected void describeMismatchSafely(String actual, Description mismatchDescription) {
         mismatchDescription
-                .appendText("for json path : " + jsonPath + " ");
+                .appendText("for jsonpath path : " + jsonPath + " ");
         Description matcherDescription;
         List<String> descriptions = new ArrayList<String>();
         for (AbstractJsonValueMatcher noMatch : notMatched) {
@@ -57,7 +57,7 @@ public class JsonPathMatcher extends TypeSafeMatcher<String> {
     @Override
     public void describeTo(Description description) {
         if (!notMatched.isEmpty()) {
-            description.appendText("for json path : " + jsonPath + " ");
+            description.appendText("for jsonpath path : " + jsonPath + " ");
             description.appendList("(", ") and (", ")", notMatched);
         }
 

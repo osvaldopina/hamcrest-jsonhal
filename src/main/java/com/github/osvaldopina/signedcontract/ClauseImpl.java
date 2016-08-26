@@ -41,7 +41,7 @@ public class ClauseImpl implements Clause {
         violations.add(violation);
     }
 
-    public void addHalViolation(String violation) {
+    public void addHaltViolation(String violation) {
         violations.add(violation);
         throw new HaltViolation();
     }

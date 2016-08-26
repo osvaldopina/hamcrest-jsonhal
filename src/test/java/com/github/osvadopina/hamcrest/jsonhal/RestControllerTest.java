@@ -1,23 +1,12 @@
 package com.github.osvadopina.hamcrest.jsonhal;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.config.EnableHypermediaSupport;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-
+/*
 @SpringBootApplication
 @RestController
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
+*/
 public class RestControllerTest {
-
+/*
     public static void main(String[] args) {
         SpringApplication.run(RestControllerTest.class, args);
 
@@ -40,4 +29,5 @@ public class RestControllerTest {
 
         return new Resource<Document>(document, self);
     }
+    */
 }

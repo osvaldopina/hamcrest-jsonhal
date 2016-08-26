@@ -1,6 +1,7 @@
 package com.github.osvaldopina.signedcontract.json;
 
 import com.github.osvaldopina.signedcontract.LeafClause;
+import com.jayway.jsonpath.JsonPath;
 
 public class JsonPathPropertyValue extends LeafClause {
 
@@ -23,6 +24,19 @@ public class JsonPathPropertyValue extends LeafClause {
 
     @Override
     protected void enforceClause(String document) {
-        todo
+
+        Object documentValue = JsonPath.parse(document).read(getJsonPath());
+
+        if (!value.equals(documentValue)) {
+            addViolation(new StringBuilder()
+                    .append("expected ")
+                    .append(getJsonPath())
+                    .append(" to be ")
+                    .append(value)
+                    .append(" but it was ")
+                    .append(documentValue)
+                    .toString());
+        }
     }
+
 }

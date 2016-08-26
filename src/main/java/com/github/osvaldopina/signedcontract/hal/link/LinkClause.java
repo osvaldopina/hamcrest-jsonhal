@@ -45,7 +45,7 @@ public class LinkClause extends BranchClause {
 
         Map<String,Object> links = parseJson(document);
         if (links.get(rel) == null) {
-            addHalViolation("could not find link with rel " + rel);
+            addHaltViolation("could not find link with rel " + rel);
         }
     }
 
